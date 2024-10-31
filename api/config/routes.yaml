@@ -1,0 +1,17 @@
+# config/routes.yaml
+api_login_check:
+    path: /api/login_check
+    methods: POST
+
+api:
+    resource:
+        path: ../src/Shared/Infrastructure/Controller/Api/
+        namespace: App\Shared\Infrastructure\Controller\Api
+    type: attribute
+    prefix: /api
+
+web:
+    resource:
+        path: ../src/Shared/Infrastructure/Controller/Web/
+        namespace: App\Shared\Infrastructure\Controller\Web
+    type: attribute

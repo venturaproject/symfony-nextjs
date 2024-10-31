@@ -1,0 +1,40 @@
+security:
+    # Definición de usuarios
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Users\Domain\Entity\User
+                property: email
+
+    # Configuración de codificación de contraseñas
+    password_hashers:
+        App\Users\Domain\Entity\User:
+            algorithm: auto
+
+    # Configuración de firewalls
+    firewalls:
+        # Firewall para login
+        login:
+            pattern: ^/api/login
+            stateless: true
+            json_login:
+                check_path: /api/login_check
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        # Firewall para la API con autenticación por JWT
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: app_user_provider
+            jwt: ~  # Este firewall usará lexik_jwt_authentication_bundle para verificar el token JWT
+
+    # Control de acceso a las rutas
+    access_control:
+        # Permitir el acceso público a la ruta de login
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/profile, roles: IS_AUTHENTICATED_FULLY }
+        # Rutas de la API requieren autenticación JWT
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

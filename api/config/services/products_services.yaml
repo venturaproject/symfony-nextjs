@@ -1,0 +1,19 @@
+
+services:
+    # Commands Handlers
+    App\Products\Application\Commands\Create\CreateProductHandler:
+        tags: ['messenger.message_handler']
+
+    App\Products\Application\Commands\Update\UpdateProductHandler:
+        tags: ['messenger.message_handler']
+
+    App\Products\Application\Commands\Delete\DeleteProductHandler:
+        tags: ['messenger.message_handler']
+
+    # Queries Handlers
+    App\Products\Application\Queries\GetAll\GetAllProducts:
+        tags: ['messenger.message_handler']
+
+    App\Products\Application\Queries\GetById\GetProductByIdHandler:
+        tags: ['messenger.message_handler']
+

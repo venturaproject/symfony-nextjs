@@ -1,0 +1,24 @@
+services:
+    # Commands Handlers
+    App\Users\Application\Commands\Create\CreateUserHandler:
+        tags: ['messenger.message_handler']
+
+    App\Users\Application\Commands\Update\UpdateUserHandler:
+        tags: ['messenger.message_handler']
+
+    App\Users\Application\Commands\Delete\DeleteUserHandler:
+        tags: ['messenger.message_handler']
+
+    App\Users\Application\Commands\ChangePassword\ChangeUserPasswordHandler:
+        tags: ['messenger.message_handler']
+
+    # Queries Handlers
+    App\Users\Application\Queries\GetAll\GetAllUsersHandler:
+        tags: ['messenger.message_handler']
+
+    App\Users\Application\Queries\GetById\GetUserByIdHandler:
+        tags: ['messenger.message_handler']
+
+    App\Users\Application\Queries\GetUser\GetUserHandler:
+        tags: ['messenger.message_handler']
+

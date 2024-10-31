@@ -1,0 +1,98 @@
+parameters:
+
+imports:
+    - 'services/products_services.yaml'
+    - 'services/users_services.yaml'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Commands
+    App\Shared\Application\Bus\Command\CommandBus:
+        public: true
+        calls:
+            - method: registerHandler
+              arguments:
+                - App\Products\Application\Commands\Create\CreateProduct
+                - ['@App\Products\Application\Commands\Create\CreateProductHandler', 'handle']
+            - method: registerHandler
+              arguments:
+                - App\Products\Application\Commands\Delete\DeleteProduct
+                - ['@App\Products\Application\Commands\Delete\DeleteProductHandler', 'handle'] 
+            - method: registerHandler
+              arguments:
+                - App\Products\Application\Commands\Update\UpdateProduct
+                - ['@App\Products\Application\Commands\Update\UpdateProductHandler', 'handle'] 
+            - method: registerHandler
+              arguments:
+                - App\Users\Application\Commands\Create\CreateUser
+                - ['@App\Users\Application\Commands\Create\CreateUserHandler', 'handle'] 
+            - method: registerHandler
+              arguments:
+                - App\Users\Application\Commands\ChangePassword\ChangeUserPassword
+                - ['@App\Users\Application\Commands\ChangePassword\ChangeUserPasswordHandler', 'handle'] 
+
+    # Queries
+    App\Shared\Application\Bus\Query\QueryBus:
+        public: true
+        arguments: ['@service_container']
+        calls:
+            - method: 'registerHandler'
+              arguments:
+                  - 'App\Products\Application\Queries\GetAll\GetAllProducts'
+                  - ['@App\Products\Application\Queries\GetAll\GetAllProductsHandler', 'handle']  
+            - method: 'registerHandler'
+              arguments:
+                  - 'App\Products\Application\Queries\GetById\GetProductById'
+                  - ['@App\Products\Application\Queries\GetById\GetProductByIdHandler', 'handle']  
+            - method: 'registerHandler'
+              arguments:
+              - 'App\Users\Application\Queries\GetUser\GetUserQuery'
+              - ['@App\Users\Application\Queries\GetUser\GetUserHandler', 'handle'] 
+
+    
+    # DI Interfaces
+    App\Shared\Application\Bus\Query\QueryBusInterface: '@App\Shared\Application\Bus\Query\QueryBus'
+    App\Shared\Application\Bus\Command\CommandBusInterface: '@App\Shared\Application\Bus\Command\CommandBus'
+
+
+    # Shared Services
+    App\Shared\Application\Services\NotFoundRedirectService:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+            
+    App\Shared\Application\Services\EmailService:
+        arguments:
+            $mailer: '@mailer'
+            $twig: '@twig'
+
+    App\Shared\Application\Services\ExcelExportService:
+        arguments:
+            $queryBus: '@App\Shared\Application\Bus\Query\QueryBus'
+            $fileName: 'report.xlsx'
+
+
+    # Event Listeners
+    App\Products\Application\Commands\Create\CreateProductHandler:
+        arguments:
+            $repository: '@App\Products\Domain\Repository\ProductRepositoryInterface'
+            $eventDispatcher: '@event_dispatcher'
+
+
+    App\Users\Application\Commands\ChangePassword\ChangeUserPasswordHandler:
+        arguments:
+            $userRepository: '@App\Users\Domain\Repository\UserRepositoryInterface'
+            $passwordHasher: '@security.user_password_hasher'
+            $eventDispatcher: '@event_dispatcher' 
+
+

@@ -1,0 +1,148 @@
+services:
+  symfony:
+    image: symfony-${PROJECT_NAME}:latest 
+    build:
+      context: . 
+      dockerfile: ./infraestructure/php/Dockerfile
+      args:
+        VERSION: latest
+    container_name: symfony-${PROJECT_NAME}
+    volumes:
+      - ./api:/var/www
+      - ./infraestructure/php/php.ini:/usr/local/etc/php/conf.d/docker-php-config.ini
+      - ./infraestructure/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+    command: ["php-fpm"]
+    ports:
+      - "9000:9000"
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    networks:
+      - app-network
+
+  react:
+    image: react-${PROJECT_NAME}:latest
+    build:
+      context: . 
+      dockerfile: ./infraestructure/node/Dockerfile
+      args:
+        VERSION: latest
+    container_name: react-${PROJECT_NAME}
+    volumes:
+      - ./frontend:/var/www
+    ports:
+      - "4000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep npm || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-${PROJECT_NAME}
+    volumes:
+      - ./infraestructure/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
+      - ./infraestructure/nginx/frontend.conf:/etc/nginx/conf.d/frontend.conf
+      - ./api:/var/www
+    ports:
+      - "8800:80"
+    depends_on:
+      symfony:
+        condition: service_healthy
+      react:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-${PROJECT_NAME}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - app-network
+
+  mail:
+    container_name: mail-${PROJECT_NAME}
+    image: axllent/mailpit:latest
+    ports:
+      - 8025:8025
+      - 1025:1025
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "1025"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-network
+
+  redis:
+    container_name: redis-${PROJECT_NAME}
+    image: redis:latest
+    command: redis-server --appendonly yes
+    volumes:
+      - ./infraestructure/redis/data:/data
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-network
+
+  supervisor:
+    image: supervisor-${PROJECT_NAME}:latest
+    container_name: supervisor-${PROJECT_NAME}
+    build:
+      context: .
+      dockerfile: ./infraestructure/supervisor/Dockerfile
+      args:
+        VERSION: latest
+    volumes:
+      - ./api:/var/www
+      - ./infraestructure/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+    ports:
+      - "9001:9001"  
+    environment:
+      PROJECT_NAME: ${PROJECT_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "supervisorctl status || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      symfony:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
