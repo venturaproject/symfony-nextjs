@@ -31,7 +31,136 @@ To install this project, follow these steps:
 
 To install this project, follow these steps:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   ```❯ api/src
+.
+├── Products
+│   ├── Application
+│   │   ├── Commands
+│   │   │   ├── Create
+│   │   │   │   ├── CreateProduct.php
+│   │   │   │   ├── CreateProductDTO.php
+│   │   │   │   └── CreateProductHandler.php
+│   │   │   ├── Delete
+│   │   │   │   ├── DeleteProduct.php
+│   │   │   │   └── DeleteProductHandler.php
+│   │   │   └── Update
+│   │   │       ├── UpdateProduct.php
+│   │   │       ├── UpdateProductDTO.php
+│   │   │       └── UpdateProductHandler.php
+│   │   ├── Console
+│   │   │   └── ExportProductsCommand.php
+│   │   ├── Event
+│   │   │   └── ProductAddedEvent.php
+│   │   ├── EventListener
+│   │   │   └── ProductAddedListener.php
+│   │   ├── Queries
+│   │   │   ├── GetAll
+│   │   │   │   ├── GetAllProducts.php
+│   │   │   │   ├── GetAllProductsDTO.php
+│   │   │   │   └── GetAllProductsHandler.php
+│   │   │   └── GetById
+│   │   │       ├── GetByIdProductsDTO.php
+│   │   │       ├── GetProductById.php
+│   │   │       └── GetProductByIdHandler.php
+│   │   └── Services
+│   ├── Domain
+│   │   ├── Entity
+│   │   │   └── Product.php
+│   │   └── Repository
+│   │       └── ProductRepositoryInterface.php
+│   └── Infrastructure
+│       ├── Database
+│       │   └── ORM
+│       │       └── Product.orm.xml
+│       └── Repository
+│           └── ProductRepository.php
+├── Shared
+│   ├── Application
+│   │   ├── Bus
+│   │   │   ├── Command
+│   │   │   │   ├── CommandBus.php
+│   │   │   │   └── CommandBusInterface.php
+│   │   │   └── Query
+│   │   │       ├── QueryBus.php
+│   │   │       └── QueryBusInterface.php
+│   │   ├── Console
+│   │   │   └── Commands
+│   │   └── Services
+│   │       ├── EmailService.php
+│   │       ├── ExcelExportService.php
+│   │       └── NotFoundRedirectService.php
+│   ├── Domain
+│   │   └── Service
+│   └── Infrastructure
+│       ├── Controller
+│       │   ├── Api
+│       │   │   ├── ApiCheckController.php
+│       │   │   ├── ProductController.php
+│       │   │   └── UserController.php
+│       │   └── Web
+│       │       ├── DefaultController.php
+│       │       ├── HealthCheckAction.php
+│       │       ├── HomepageController.php
+│       │       ├── NotFoundRedirectController.php
+│       │       └── PhpinfoController.php
+│       ├── Database
+│       │   ├── Fixtures
+│       │   │   ├── AppFixtures.php
+│       │   │   └── ProductFixtures.php
+│       │   ├── Migrations
+│       │   │   ├── Version20241028072140.php
+│       │   │   └── Version20241028074836.php
+│       │   └── data
+│       │       └── products.json
+│       ├── Kernel.php
+│       └── Service
+│           ├── GreetingGenerator copia.php
+│           └── PhpInfoService.php
+└── Users
+    ├── Application
+    │   ├── Commands
+    │   │   ├── Create
+    │   │   │   ├── CreateUser.php
+    │   │   │   ├── CreateUserDTO.php
+    │   │   │   └── CreateUserHandler.php
+    │   │   ├── ChangePassword
+    │   │   │   ├── ChangeUserPassword.php
+    │   │   │   ├── ChangeUserPasswordDTO.php
+    │   │   │   └── ChangeUserPasswordHandler.php
+    │   │   ├── Delete
+    │   │   │   ├── DeleteUser.php
+    │   │   │   └── DeleteUserHandler.php
+    │   │   └── Update
+    │   │       ├── UpdateUser.php
+    │   │       ├── UpdateUserDTO.php
+    │   │       └── UpdateUserHandler.php
+    │   ├── Console
+    │   │   └── CreateUserConsole.php
+    │   ├── Event
+    │   │   └── ChangePasswordEvent.php
+    │   ├── EventListener
+    │   │   └── ChangePasswordEventListener.php
+    │   └── Queries
+    │       ├── GetAll
+    │       │   ├── GetAllUsers.php
+    │       │   ├── GetAllUsersDTO.php
+    │       │   └── GetAllUsersHandler.php
+    │       ├── GetById
+    │       │   ├── GetUserById.php
+    │       │   ├── GetUserByIdDTO.php
+    │       │   └── GetUserByIdHandler.php
+    │       └── GetUser
+    │           ├── GetUserDTO.php
+    │           ├── GetUserHandler.php
+    │           └── GetUserQuery.php
+    ├── Domain
+    │   ├── Entity
+    │   │   └── User.php
+    │   └── Repository
+    │       └── UserRepositoryInterface.php
+    └── Infrastructure
+        ├── Database
+        │   └── ORM
+        │       └── User.orm.xml
+        └── Repository
+            └── UserRepository.php
