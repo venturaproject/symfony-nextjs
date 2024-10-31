@@ -19,11 +19,11 @@ class HomepageController extends AbstractController
     #[Route('/', name: 'app_homepage')]
     public function index(): Response
     {
-        // Aquí puedes obtener datos de salud de la aplicación
+      
         $healthData = [
             'status' => 'ok',
             'timestamp' => date('Y-m-d H:i:s'),
-            // Puedes agregar más información relevante aquí
+     
         ];
 
         $this->logger->info('Accediendo a la página de inicio', $healthData);
