@@ -27,12 +27,9 @@ To install this project, follow these steps:
    make run
 
 
-## Description
-
-To install this project, follow these steps:
-
-   ```❯ api/src
-.
+## Architecture
+   ```
+❯ api/src
 ├── Products
 │   ├── Application
 │   │   ├── Commands
@@ -114,7 +111,6 @@ To install this project, follow these steps:
 │       │       └── products.json
 │       ├── Kernel.php
 │       └── Service
-│           ├── GreetingGenerator copia.php
 │           └── PhpInfoService.php
 └── Users
     ├── Application
