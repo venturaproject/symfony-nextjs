@@ -9,18 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NotFoundRedirectController extends AbstractController
 {
-    private Environment $twig; // Propiedad para el servicio Twig
-
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig; // Inicializa el servicio Twig
-    }
 
     #[Route('/not-found', name: 'not_found')]
-    public function __invoke(): Response
+    public function index(): Response
     {
-        // Renderiza la plantilla 404.html.twig
-        $content = $this->twig->render('errors/404.html.twig');
-        return new Response($content, 404);
+        return $this->render('errors/404.html.twig');
+   
     }
 }
+

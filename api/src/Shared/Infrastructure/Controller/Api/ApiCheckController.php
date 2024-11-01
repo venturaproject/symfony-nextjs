@@ -3,7 +3,6 @@
 namespace App\Shared\Infrastructure\Controller\Api;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/health-api', 'health-api', methods: ['GET'])]
