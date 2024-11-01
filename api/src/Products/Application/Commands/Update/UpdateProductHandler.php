@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace App\Products\Application\Commands\Update;
 
 use App\Products\Domain\Repository\ProductRepositoryInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\Products\Application\Messages\ProductUpdatedMessage;
 
 class UpdateProductHandler
 {
     private ProductRepositoryInterface $repository;
+    private MessageBusInterface $messageBus;
 
-    public function __construct(ProductRepositoryInterface $repository)
+    public function __construct(ProductRepositoryInterface $repository, MessageBusInterface $messageBus)
     {
         $this->repository = $repository;
+        $this->messageBus = $messageBus;
     }
 
     public function handle(UpdateProduct $command): void
@@ -42,5 +46,15 @@ class UpdateProductHandler
         }
 
         $this->repository->update($product);
+
+        // Enviar mensaje con información del producto actualizado
+        $message = new ProductUpdatedMessage(
+            $product->getId(),
+            $product->getName(),
+            $product->getPrice(),
+            $product->getDescription()
+        );
+
+        $this->messageBus->dispatch($message);
     }
 }
