@@ -10,6 +10,10 @@ services:
         tags: ['messenger.message_handler']
 
     App\Users\Application\Commands\ChangePassword\ChangeUserPasswordHandler:
+        arguments:
+            $userRepository: '@App\Users\Domain\Repository\UserRepositoryInterface'
+            $passwordHasher: '@security.user_password_hasher'
+            $eventDispatcher: '@event_dispatcher'
         tags: ['messenger.message_handler']
 
     # Queries Handlers
@@ -21,4 +25,3 @@ services:
 
     App\Users\Application\Queries\GetUser\GetUserHandler:
         tags: ['messenger.message_handler']
-

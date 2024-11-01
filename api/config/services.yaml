@@ -66,11 +66,6 @@ services:
 
 
     # Shared Services
-    App\Shared\Application\Services\NotFoundRedirectService:
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
-
-            
     App\Shared\Application\Services\EmailService:
         arguments:
             $mailer: '@mailer'
@@ -80,19 +75,14 @@ services:
         arguments:
             $queryBus: '@App\Shared\Application\Bus\Query\QueryBus'
             $fileName: 'report.xlsx'
+    
+    # Events Subscribers
+    App\Shared\Infrastructure\EventSubscriber\RouteNotFoundSubscriber:
+       tags:
+           - { name: 'kernel.event_subscriber' }
+       bind:
+          $urlGenerator: '@router'
 
 
-    # Event Listeners
-    App\Products\Application\Commands\Create\CreateProductHandler:
-        arguments:
-            $repository: '@App\Products\Domain\Repository\ProductRepositoryInterface'
-            $eventDispatcher: '@event_dispatcher'
-
-
-    App\Users\Application\Commands\ChangePassword\ChangeUserPasswordHandler:
-        arguments:
-            $userRepository: '@App\Users\Domain\Repository\UserRepositoryInterface'
-            $passwordHasher: '@security.user_password_hasher'
-            $eventDispatcher: '@event_dispatcher' 
 
 

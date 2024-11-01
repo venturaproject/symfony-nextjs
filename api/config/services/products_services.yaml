@@ -1,13 +1,20 @@
-
 services:
     # Commands Handlers
     App\Products\Application\Commands\Create\CreateProductHandler:
+        arguments:
+            $repository: '@App\Products\Domain\Repository\ProductRepositoryInterface'
+            $eventDispatcher: '@event_dispatcher'
         tags: ['messenger.message_handler']
 
     App\Products\Application\Commands\Update\UpdateProductHandler:
+        arguments:
+            $repository: '@App\Products\Domain\Repository\ProductRepositoryInterface'
+            $eventDispatcher: '@event_dispatcher'
         tags: ['messenger.message_handler']
 
     App\Products\Application\Commands\Delete\DeleteProductHandler:
+        arguments:
+            $repository: '@App\Products\Domain\Repository\ProductRepositoryInterface'
         tags: ['messenger.message_handler']
 
     # Queries Handlers
@@ -17,8 +24,20 @@ services:
     App\Products\Application\Queries\GetById\GetProductByIdHandler:
         tags: ['messenger.message_handler']
 
-    #  Message Services
+    # Message Services
     App\Products\Application\Messages\ProductUpdatedMessageHandler:
         arguments:
             $logger: '@logger'
         tags: ['messenger.message_handler']
+
+    # Event Listeners
+    App\Products\Application\EventListener\ProductAddedListener:
+        arguments:
+            $emailService: '@App\Shared\Application\Services\EmailService'
+
+    # Event Subscribers
+    App\Products\Application\EventSubscriber\ProductLoggingSubscriber:
+        arguments:
+            $logger: '@logger'
+        tags:
+            - { name: doctrine.event_subscriber }
