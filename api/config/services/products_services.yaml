@@ -17,3 +17,8 @@ services:
     App\Products\Application\Queries\GetById\GetProductByIdHandler:
         tags: ['messenger.message_handler']
 
+    #  Message Services
+    App\Products\Application\Messages\ProductUpdatedMessageHandler:
+        arguments:
+            $logger: '@logger'
+        tags: ['messenger.message_handler']
