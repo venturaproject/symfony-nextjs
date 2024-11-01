@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /var/log/supervisor
 
 # Ensure the logs directory exists, then change ownership
-RUN mkdir -p /var/www/storage/logs && chown -R www-data:www-data /var/www/storage/logs
+RUN mkdir -p /var/log && chown -R www-data:www-data /var/log
 
 # Copy Supervisor configuration file
 COPY ./infraestructure/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
