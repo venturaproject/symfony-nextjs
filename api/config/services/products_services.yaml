@@ -34,10 +34,3 @@ services:
     App\Products\Application\EventListener\ProductAddedListener:
         arguments:
             $emailService: '@App\Shared\Application\Services\EmailService'
-
-    # Event Subscribers
-    App\Products\Application\EventSubscriber\ProductLoggingSubscriber:
-        arguments:
-            $logger: '@logger'
-        tags:
-            - { name: doctrine.event_subscriber }
