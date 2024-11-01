@@ -25,7 +25,6 @@ class CreateProductHandler
         $dto = $command->getDTO();
 
         $product = new Product(
-            id: 0,  
             name: $dto->name,
             price: $dto->price,
             description: $dto->description

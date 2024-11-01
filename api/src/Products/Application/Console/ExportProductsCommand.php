@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace App\Products\Application\Console;
 
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -15,6 +13,7 @@ use App\Shared\Application\Services\ExcelExportService;
 use App\Shared\Application\Services\EmailService;
 use App\Products\Application\Queries\GetAll\GetAllProducts;
 use Carbon\Carbon;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
     name: 'app:export-products',
@@ -24,11 +23,13 @@ class ExportProductsCommand extends Command
 {
     private ExcelExportService $excelExportService;
     private EmailService $emailService;
+    private string $projectDir;
 
-    public function __construct(ExcelExportService $excelExportService, EmailService $emailService)
+    public function __construct(ExcelExportService $excelExportService, EmailService $emailService, KernelInterface $kernel)
     {
         $this->excelExportService = $excelExportService;
         $this->emailService = $emailService;
+        $this->projectDir = $kernel->getProjectDir(); 
 
         parent::__construct();
     }
@@ -39,11 +40,9 @@ class ExportProductsCommand extends Command
 
         // Crear la consulta para obtener los productos
         $query = new GetAllProducts();
-        
-        // Generar el nombre y la ruta del archivo Excel con marca de tiempo
+  
         $timestamp = Carbon::now()->format('Y_m_d_H_i_s');
-        $projectDir = $this->getApplication()->getKernel()->getProjectDir();
-        $exportDir = sprintf('%s/var/exports', $projectDir);
+        $exportDir = sprintf('%s/var/exports', $this->projectDir);
     
         // Verifica si el directorio existe, si no lo crea
         if (!is_dir($exportDir)) {
@@ -51,10 +50,9 @@ class ExportProductsCommand extends Command
         }
     
         $filePath = sprintf('%s/report_%s.xlsx', $exportDir, $timestamp);
-        // Generar el archivo Excel
+
         $this->excelExportService->generateExcelFromQuery($query, $filePath);
 
-        // Configurar los datos para el correo electrónico
         $recipient = 'recipient@example.com';
         $subject = 'Reporte de productos';
         $data = [
@@ -65,10 +63,8 @@ class ExportProductsCommand extends Command
         $template = 'emails/report.html.twig'; 
         $attachments = [$filePath]; 
 
-        // Enviar el email con el archivo adjunto
         $this->emailService->send($template, $data, $recipient, $subject, $attachments);
 
-        // Confirmación en consola
         $io->success(sprintf('Excel report generated and emailed to: %s', $recipient));
 
         return Command::SUCCESS;

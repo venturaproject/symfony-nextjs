@@ -34,3 +34,5 @@ services:
     App\Products\Application\EventListener\ProductAddedListener:
         arguments:
             $emailService: '@App\Shared\Application\Services\EmailService'
+
+

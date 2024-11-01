@@ -14,9 +14,9 @@ class Product
     private ?\DateTimeInterface $created_at = null; 
     private ?\DateTimeInterface $updated_at = null; 
 
-    public function __construct(int $id, string $name, float $price, ?string $description = null)
+    public function __construct(string $name, float $price, ?string $description = null)
     {
-        $this->id = $id; 
+
         $this->name = $name;
         $this->price = $price;
         $this->description = $description;
@@ -28,6 +28,12 @@ class Product
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getName(): ?string

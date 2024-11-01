@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-// src/Products/Application/EventListener/ProductAddedListener.php
-
 namespace App\Products\Application\EventListener;
 
 use App\Products\Application\Event\ProductAddedEvent;

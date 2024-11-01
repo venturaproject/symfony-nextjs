@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 class ApplicationMessageHandler 
 {
-    public function __invoke(ApplicationMessage $message)
+    public function __invoke(ApplicationMessage $message): void
     {
         
         echo 'Procesando mensaje: ' . $message->getContent();

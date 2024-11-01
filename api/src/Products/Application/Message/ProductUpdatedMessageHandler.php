@@ -17,7 +17,7 @@ class ProductUpdatedMessageHandler
         $this->logger = $logger;
     }
 
-    public function __invoke(ProductUpdatedMessage $message)
+    public function __invoke(ProductUpdatedMessage $message): void
     {
         // Crear un log con la información del producto
         $this->logger->info('Producto actualizado', [

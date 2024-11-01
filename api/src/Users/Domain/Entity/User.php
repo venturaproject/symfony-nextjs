@@ -28,13 +28,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * User constructor.
      *
-     * @param string $name Nombre del usuario
-     * @param string $email Correo electrónico del usuario
-     * @param string $hashedPassword Contraseña hasheada del usuario
+     * @param string $name 
+     * @param string $email 
+     * @param string $hashedPassword 
      */
     public function __construct(string $name, string $email, string $hashedPassword)
     {
-        $this->id = 0; // Asignar ID al momento de la creación
         $this->name = $name;
         $this->email = $email;
         $this->password = $hashedPassword;

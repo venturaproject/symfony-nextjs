@@ -22,12 +22,11 @@ class ProductFixtures extends Fixture
         $productData = $jsonData ? json_decode($jsonData, true) : [];
 
         foreach ($productData as $data) {
-
+            // Crear el producto pasando los parámetros en el orden correcto
             $product = new Product(
-                $faker->randomNumber(),    
-                $data['name'],              
-                $faker->randomFloat(2, 10, 1000), 
-                $data['description'] ?? null  
+                $data['name'],                  // Nombre
+                $faker->randomFloat(2, 10, 1000), // Precio
+                $data['description'] ?? null      // Descripción
             );
 
             $product->setDateAdd(Carbon::now());
@@ -38,3 +37,4 @@ class ProductFixtures extends Fixture
         $manager->flush();
     }
 }
+

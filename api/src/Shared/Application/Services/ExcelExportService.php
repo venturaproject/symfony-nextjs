@@ -51,11 +51,9 @@ class ExcelExportService
             }
         }
     
-        // Guarda el archivo Excel en el sistema de archivos
+        // Guarda el archivo Excel en el sistema de archivos utilizando el $fileName
         $writer = new Xlsx($spreadsheet);
-        $writer->save($path);
+        $writer->save($path ?: $this->fileName); // Usa el path pasado o el nombre por defecto
     }
-    
-    
-    
 }
+
