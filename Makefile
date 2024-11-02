@@ -9,6 +9,7 @@ APP_CONTAINER = symfony-${PROJECT_NAME}
 FRONTEND_CONTAINER = react-${PROJECT_NAME}
 DB_CONTAINER = db-${PROJECT_NAME}
 SUPERVISOR_CONTAINER = supervisor-${PROJECT_NAME}
+RABBITMQ_CONTAINER = rabbitmq-${PROJECT_NAME}
 
 run:
 	@docker-compose -f docker-compose.yml build --no-cache
@@ -25,6 +26,9 @@ db-container:
 
 supervisor-container:
 	@docker exec -it $(SUPERVISOR_CONTAINER) bash
+
+rabbitmq-container:
+	@docker exec -it $(RABBITMQ_CONTAINER) bash
 
 	
 

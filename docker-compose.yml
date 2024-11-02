@@ -100,6 +100,28 @@ services:
     networks:
       - app-network
 
+  rabbitmq:
+    image: rabbitmq:management
+    hostname: rabbitmq
+    container_name: rabbitmq-${PROJECT_NAME}
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./infraestructure/rabbitmq:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - app-network
+
   redis:
     container_name: redis-${PROJECT_NAME}
     image: redis:latest
