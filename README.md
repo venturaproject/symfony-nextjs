@@ -7,10 +7,16 @@
 This project is designed as a decoupled application, showcasing the separation of concerns between the **Frontend** and **Backend** components.
 
 ### Backend
+```bash
+localhost:8800
+```
 
 The backend is developed using **Symfony**, following a hexagonal architecture that utilizes bounded contexts. This design allows for better organization and separation of different aspects of the application. The backend implements the **CQRS** (Command Query Responsibility Segregation) pattern, utilizing both command and query buses for efficient management of information. This approach facilitates smooth registration, modification, and access to data within the system.
 
 ### Frontend
+```bash
+localhost:4000
+```
 
 The frontend operates independently from the backend and is built using **Next.js** with **React**. It leverages **TypeScript** for improved type safety and developer experience. For styling and layout, the project integrates **Tailwind CSS**, allowing for a responsive and modern design without compromising performance. The decoupling of the frontend from the backend enables independent development, deployment, and scaling of both components.
 
