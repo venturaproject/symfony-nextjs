@@ -90,8 +90,8 @@ services:
     container_name: mail-${PROJECT_NAME}
     image: axllent/mailpit:latest
     ports:
-      - 8025:8025
-      - 1025:1025
+      - "8025:8025"
+      - "1025:1025"
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "1025"]
       interval: 10s
@@ -119,6 +119,46 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+    depends_on:
+      symfony:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
+    environment:
+      discovery.type: "single-node"
+      xpack.security.enabled: false
+      ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"  
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - app-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.5.1
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5044:5044"  
+    volumes:
+      - ./infraestructure/elk/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:cached
+      - ./infraestructure/elk/logstash/conf.d:/etc/logstash/conf.d:cached
+    networks:
+      - app-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.5.1
+    environment:
+      SERVER_NAME: "localhost"
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
     networks:
       - app-network
 
@@ -129,7 +169,7 @@ services:
     volumes:
       - ./infraestructure/redis/data:/data
     ports:
-      - 6379:6379
+      - "6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -168,3 +208,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:  
+  esdata:

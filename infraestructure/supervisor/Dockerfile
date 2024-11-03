@@ -11,8 +11,11 @@ LABEL version=${VERSION}
 RUN apt-get update && apt-get install -y \
     supervisor \
     libxml2-dev \
+    librabbitmq-dev \ 
     && docker-php-ext-install dom \
     && docker-php-ext-install mysqli pdo pdo_mysql \
+    && pecl install amqp \  
+    && docker-php-ext-enable amqp \ 
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /var/lib/apt/lists/*
 
@@ -30,3 +33,4 @@ WORKDIR /var/www
 
 # Default command to run Supervisor
 CMD ["/usr/bin/supervisord", "-n"]
+
