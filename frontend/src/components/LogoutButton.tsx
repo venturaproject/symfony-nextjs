@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { MdAccountCircle } from 'react-icons/md';
@@ -9,6 +9,7 @@ import { getProfile } from '../services/UserService';
 const LogoutButton = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userProfile, setUserProfile] = useState({ name: '', email: '' });
+  const dropdownRef = useRef<HTMLDivElement>(null); // Especifica el tipo HTMLDivElement
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -36,8 +37,21 @@ const LogoutButton = () => {
     router.push('/login?reason=auth');
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => { // Especifica el tipo MouseEvent
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button onClick={toggleDropdown} className="flex items-center space-x-2">
         <MdAccountCircle size={24} />
       </button>

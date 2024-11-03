@@ -47,7 +47,7 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts
 USER root
 
 # Copy the entrypoint script
-COPY ./infraestructure/php/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY ./infrastructure/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Set the entrypoint

@@ -62,6 +62,10 @@
   "Help": "Ayuda",
   "Cuenta": "Cuenta",
   "Home": "Home",
+  "Español": "Español",
+  "Inglés": "Inglés",
+  "Bienvenido a Frontend!": "Bienvenido a Frontend!",
+  "Estado de la API": "Estado de la API",
   "Cambiar contraseña": "Cambiar contraseña",
   "Error al cambiar la contraseña": "Error al cambiar la contraseña",
   "Error al iniciar sesión. Por favor, compruebe sus credenciales e inténtelo de nuevo.": "Error al iniciar sesión. Por favor, compruebe sus credenciales e inténtelo de nuevo."

@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductList from '../../src/components/ProductList';
 import { useTranslation } from 'react-i18next'; 
+import withAuth from '../../hoc/withAuth';
 
 const ProductsPage: React.FC = () => {
     const { t } = useTranslation(); 
@@ -12,4 +13,4 @@ const ProductsPage: React.FC = () => {
     );
 };
 
-export default ProductsPage;
+export default withAuth(ProductsPage);

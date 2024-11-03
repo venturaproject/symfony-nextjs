@@ -58,9 +58,14 @@
   "Última Actualización": "Last Updated",
   "Perfil del Cliente": "Customer Profile",
   "Configuraciones": "Settings",
+  "Bienvenido a Frontend!": "Welcome to Frontend!",
+  "Estado de la API": "API Status",
   "Ayuda": "Help",
+  "Español": "Spanish",
+  "Inglés": "English",
   "Cuenta": "Account",
   "Home": "Home",
   "Cambiar contraseña": "Change password",
+  "Error al cambiar la contraseña": "Error changing password",
   "Error al iniciar sesión. Por favor, compruebe sus credenciales e inténtelo de nuevo.": "Error logging in. Please check your credentials and try again."
 }

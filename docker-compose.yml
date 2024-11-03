@@ -3,14 +3,14 @@ services:
     image: symfony-${PROJECT_NAME}:latest 
     build:
       context: . 
-      dockerfile: ./infraestructure/php/Dockerfile
+      dockerfile: ./infrastructure/php/Dockerfile
       args:
         VERSION: latest
     container_name: symfony-${PROJECT_NAME}
     volumes:
       - ./api:/var/www
-      - ./infraestructure/php/php.ini:/usr/local/etc/php/conf.d/docker-php-config.ini
-      - ./infraestructure/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./infrastructure/php/php.ini:/usr/local/etc/php/conf.d/docker-php-config.ini
+      - ./infrastructure/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     entrypoint: ["/usr/local/bin/entrypoint.sh"]
     command: ["php-fpm"]
     ports:
@@ -28,7 +28,7 @@ services:
     image: react-${PROJECT_NAME}:latest
     build:
       context: . 
-      dockerfile: ./infraestructure/node/Dockerfile
+      dockerfile: ./infrastructure/node/Dockerfile
       args:
         VERSION: latest
     container_name: react-${PROJECT_NAME}
@@ -49,8 +49,8 @@ services:
     image: nginx:alpine
     container_name: nginx-${PROJECT_NAME}
     volumes:
-      - ./infraestructure/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
-      - ./infraestructure/nginx/frontend.conf:/etc/nginx/conf.d/frontend.conf
+      - ./infrastructure/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
+      - ./infrastructure/nginx/frontend.conf:/etc/nginx/conf.d/frontend.conf
       - ./api:/var/www
     ports:
       - "8800:80"
@@ -112,7 +112,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - ./infraestructure/rabbitmq:/var/lib/rabbitmq
+      - ./infrastructure/rabbitmq:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_running"]
       interval: 10s
@@ -145,8 +145,8 @@ services:
     ports:
       - "5044:5044"  
     volumes:
-      - ./infraestructure/elk/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:cached
-      - ./infraestructure/elk/logstash/conf.d:/etc/logstash/conf.d:cached
+      - ./infrastructure/elk/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:cached
+      - ./infrastructure/elk/logstash/conf.d:/etc/logstash/conf.d:cached
     networks:
       - app-network
 
@@ -167,7 +167,7 @@ services:
     image: redis:latest
     command: redis-server --appendonly yes
     volumes:
-      - ./infraestructure/redis/data:/data
+      - ./infrastructure/redis/data:/data
     ports:
       - "6379:6379"
     healthcheck:
@@ -183,12 +183,12 @@ services:
     container_name: supervisor-${PROJECT_NAME}
     build:
       context: .
-      dockerfile: ./infraestructure/supervisor/Dockerfile
+      dockerfile: ./infrastructure/supervisor/Dockerfile
       args:
         VERSION: latest
     volumes:
       - ./api:/var/www
-      - ./infraestructure/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+      - ./infrastructure/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
     ports:
       - "9001:9001"  
     environment:

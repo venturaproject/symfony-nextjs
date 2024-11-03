@@ -49,8 +49,8 @@ const ChangePassword: React.FC = () => {
                 text: t('passwordChanged'),
             });
         } catch (err: any) {
-            const errorResponse = err.response.data; // Ajusta esto según la forma en que tu API devuelve los errores
-            setErrors(errorResponse.errors || { general: [t('passwordChangeError')] });
+            const errorResponse = err.response.data; 
+            setErrors(errorResponse.errors || { general: [t('Error al cambiar la contraseña')] });
             Swal.fire({
                 icon: 'error',
                 title: t('error'),
