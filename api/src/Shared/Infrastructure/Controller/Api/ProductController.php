@@ -58,7 +58,7 @@ class ProductController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        // Validar los datos
+ 
         if (!isset($data['name'], $data['price'])) {
             return $this->json(['error' => 'Name and price are required'], Response::HTTP_BAD_REQUEST);
         }
@@ -71,10 +71,8 @@ class ProductController extends AbstractController
             date_add: isset($data['date_add']) ? new \DateTime($data['date_add']) : null
         );
 
-        // Crear el comando
         $command = new CreateProduct($dto);
 
-        // Enviar el comando al CommandBus
         $this->commandBus->handle($command);
 
         return $this->json(['status' => 'Product created'], Response::HTTP_CREATED);
@@ -85,12 +83,12 @@ class ProductController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        // Validar si se han proporcionado datos para la actualización
+
         if (empty($data)) {
             return $this->json(['error' => 'No data provided for update'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Crear el DTO para actualización
+   
         $dto = new UpdateProductDTO(
             name: $data['name'] ?? null,
             price: isset($data['price']) ? (float)$data['price'] : null,
@@ -98,7 +96,6 @@ class ProductController extends AbstractController
             date_add: isset($data['date_add']) ? new \DateTime($data['date_add']) : null
         );
 
-        // Crear el comando para actualizar
         $command = new UpdateProduct($id, $dto);
         $this->commandBus->handle($command);
 
