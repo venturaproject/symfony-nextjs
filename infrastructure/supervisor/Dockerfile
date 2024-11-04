@@ -1,5 +1,5 @@
 # Use PHP 8.2 CLI as the base image
-FROM php:8.2-cli
+FROM php:8.3-cli
 
 # Define an argument for the version
 ARG VERSION

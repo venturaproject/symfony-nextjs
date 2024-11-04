@@ -3,6 +3,15 @@ ifneq (,$(wildcard .env))
     export
 endif
 
+# Executables (local)
+DOCKER_COMP = docker compose
+
+# Executables
+PHP      = $(PHP_CONT) php
+COMPOSER = $(PHP_CONT) composer
+SYMFONY  = $(PHP) bin/console
+
+# Variables
 PROJECT_NAME ?= deploy
 PROJECT_REFERENCE ?= symfony-react-docker
 APP_CONTAINER = symfony-${PROJECT_NAME}
@@ -14,6 +23,15 @@ RABBITMQ_CONTAINER = rabbitmq-${PROJECT_NAME}
 run:
 	@docker-compose -f docker-compose.yml build --no-cache
 	@docker-compose -f docker-compose.yml -p $(PROJECT_REFERENCE) up -d
+
+down:
+	@docker-compose down --remove-orphans
+
+logs: 
+	@$(DOCKER_COMP) logs --tail=0 --follow
+
+sta:
+	@docker exec -it $(APP_CONTAINER) php vendor/bin/phpstan analyse src --level=7
 
 app-container:
 	@docker exec -it $(APP_CONTAINER) bash

@@ -1,4 +1,4 @@
-FROM php:8.2.0-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 # Define an argument for the version
 ARG VERSION
