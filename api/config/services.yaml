@@ -1,5 +1,6 @@
 parameters:
    elk.endpoint: '%env(ELK_ENDPOINT)%'
+
 imports:
     - 'services/products_services.yaml'
     - 'services/users_services.yaml'
@@ -13,8 +14,8 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+            - '../src/*/Domain/Entity/' 
+            - '../src/Shared/Infrastructure/Kernel.php'
 
     # Commands
     App\Shared\Application\Bus\Command\CommandBus:
@@ -44,7 +45,6 @@ services:
     # Queries
     App\Shared\Application\Bus\Query\QueryBus:
         public: true
-        arguments: ['@service_container']
         calls:
             - method: 'registerHandler'
               arguments:
