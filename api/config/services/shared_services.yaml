@@ -1,0 +1,37 @@
+services:
+    
+    # Elasticsearch and Monolog
+    app.elasticsearch.client:
+        class: Elastic\Elasticsearch\Client
+        factory: ['Elastic\Elasticsearch\ClientBuilder', 'fromConfig']
+        arguments:
+            - hosts: ['%elk.endpoint%']
+
+    app.monolog.elasticsearch_handler:
+        class: Monolog\Handler\ElasticsearchHandler
+        arguments:
+            $client: '@app.elasticsearch.client'
+            $options:
+                index: 'symfony_%kernel.environment%'
+                type: '_doc'
+                ignore_error: true
+
+    # Email service
+    App\Shared\Application\Services\EmailService:
+        arguments:
+            $mailer: '@mailer'
+            $twig: '@twig'
+
+    
+     # ExportExcell service
+    App\Shared\Application\Services\ExcelExportService:
+        arguments:
+            $queryBus: '@App\Shared\Application\Bus\Query\QueryBus'
+            $fileName: 'report.xlsx'
+    
+    # Events Subscribers
+    App\Shared\Infrastructure\EventSubscriber\RouteNotFoundSubscriber:
+        tags:
+            - { name: 'kernel.event_subscriber' }
+        bind:
+            $urlGenerator: '@router'

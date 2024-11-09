@@ -1,3 +1,4 @@
+# config/services/products_services.yaml
 services:
     # Commands Handlers
     App\Products\Application\Commands\Create\CreateProductHandler:
